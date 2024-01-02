@@ -49,6 +49,9 @@ public class Hotbar
 
     public void Select(int index)
     {
+        if (index == SelectedIndex)
+            return;
+
         if (SelectedIndex != -1)
             Unselect();
 

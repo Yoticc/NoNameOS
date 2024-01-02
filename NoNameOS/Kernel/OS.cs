@@ -33,6 +33,7 @@ public class OS
     const Key ActiveMouseKey = Key.NumLock;
     const int CursorSize = 6;
     const int CursorSizeD2 = CursorSize / 2;
+    public double MouseSensitivity = 0.5;
 
     public readonly OSArguments InitArgs;
 
@@ -290,8 +291,8 @@ public class OS
     {
         if (IsActiveMouse)
         {
-            RealMouseX += x / 2d;
-            RealMouseY += y / 2d;
+            RealMouseX += x * MouseSensitivity;
+            RealMouseY += y * MouseSensitivity;
 
             if (CurrentApp != null)
             {
@@ -316,29 +317,31 @@ public class OS
 
         if (IsActiveMouse)
         {
-            if (MouseX <= Hotbar.Width)
+            if (key == Key.MouseLeft)
             {
-                int index = (int)(MouseY / Hotbar.IconSize);
-                Hotbar.Select(index);
-            }
-            else
-            {
-                if (CurrentApp != null)
+                if (MouseX <= Hotbar.Width)
                 {
-                    if (key == Key.MouseLeft)
-                    {
-                        CurrentApp.OnMouseClick(true);
-                        CurrentApp.OnLeftMouseClick();
-                    }
-                    else if (key == Key.MouseRight)
-                    {
-                        CurrentApp.OnMouseClick(false);
-                        CurrentApp.OnRightMouseClick();
-                    }
-
-                    CurrentApp.OnKeyDown(key);
+                    int index = (int)(MouseY / Hotbar.IconSize);
+                    Hotbar.Select(index);
+                    return false;
                 }
             }
+
+            if (CurrentApp != null)
+            {
+                if (key == Key.MouseLeft)
+                {
+                    CurrentApp.OnMouseClick(true);
+                    CurrentApp.OnLeftMouseClick();
+                }
+                else if (key == Key.MouseRight)
+                {
+                    CurrentApp.OnMouseClick(false);
+                    CurrentApp.OnRightMouseClick();
+                }
+
+                CurrentApp.OnKeyDown(key);
+            }            
         }
         else
         {

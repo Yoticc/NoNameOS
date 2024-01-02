@@ -10,11 +10,10 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\TuringAPI\TuringAPI\TuringAPI.csproj" />
-    <ProjectReference Include="..\..\TuringFeatures\InterceptionAPI\InterceptionAPI.csproj" />
-    <ProjectReference Include="..\..\TuringFeatures\Interop\Interop.csproj" />
+    <ProjectReference Include="..\Interop\Interop.csproj" />
+    <ProjectReference Include="..\InterceptionAPI\InterceptionAPI.csproj" />
+    <ProjectReference Include="..\TuringAPI\TuringAPI.csproj" />
   </ItemGroup>
-
 
 	<ItemGroup>
 		<Reference Include="System.Drawing">
