@@ -218,14 +218,10 @@ public unsafe partial class VirtualDisplay
             bool hasNoFullPart = notFullDest != 0;
             int notFullIndex = xStart / partWidth;
 
-
-
             int startXp = hasNoFullPart ? notFullIndex + 1 : 0;
             for (int yp = 0; yp < splitStrength; yp++)
                 for (int xp = startXp; xp < splitStrength; xp++)
                 {
-                    //Console.WriteLine($"b: {xp} {xStart} {notFullIndex} {notFullDest}");
-
                     bool isDiffer = false;
                     int sX = xp * partWidth;
                     int eX = sX + partWidth;
@@ -239,12 +235,11 @@ public unsafe partial class VirtualDisplay
                                 goto DIF;
                             }
 
-                        DIF:
+                    DIF:
                     if (isDiffer)
                     {
 
                         int realWidth = (sX - xStart + partWidth) > Width ? (Width - (sX - xStart)) : partWidth;
-                        //Console.WriteLine($"{sX} {sY} {eX} {eY} {realWidth} {xStart} {sX - xStart}");
                         byte[] bytes = bitmap.CopyRegionToBytes(sX - xStart, sY, realWidth, partHeight);
 
                         Draw(sX, sY, eX - sX, eY - sY, bytes);

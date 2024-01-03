@@ -7,13 +7,8 @@ using System.Threading.Tasks;
 using TuringAPI;
 
 namespace NoNameOS.Apps;
-public class MotionDetectorApp : App
+public class MotionDetectorApp() : App("Motion Detector")
 {
-    public MotionDetectorApp() : base("Motion Detector")
-    {
-
-    }
-
     public override MemoryBitmap GetIcon()
     {
         using var bitmap = NewGDIBitmapForIcon;

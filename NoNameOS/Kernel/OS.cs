@@ -1,5 +1,5 @@
 ﻿using NoNameOS.Kernel.DisplayManagement;
-using NoNameOS.Win;
+using NoNameOS.Kernel.DisplayManagement.Windows;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -33,7 +33,10 @@ public class OS
     const Key ActiveMouseKey = Key.NumLock;
     const int CursorSize = 6;
     const int CursorSizeD2 = CursorSize / 2;
+
     public double MouseSensitivity = 0.5;
+
+    public string UserName = Environment.UserName;
 
     public readonly OSArguments InitArgs;
 
@@ -70,6 +73,10 @@ public class OS
     MemoryBitmap CursorBitmap;
 
     public bool IsActiveMouse => (Interop.GetKeyState(Keys.NumLock) & (1 << 0)) == 0;
+    public bool IsActiveCapsLock => (Interop.GetKeyState(Keys.CapsLock) & (1 << 0)) != 0;
+    public bool IsActiveControl => (Interop.GetKeyState(Keys.LControlKey) & 0x8000) != 0;
+    public bool IsActiveShift => (Interop.GetKeyState(Keys.LShiftKey) & 0x8000) != 0;
+    public bool IsKeyPressed(Key key) => IAPI.IsKeyDown(key);
 
     #region Init
     void InitDisplay() 
@@ -94,6 +101,8 @@ public class OS
         if (InitArgs.ShowVirtualWindowsDisplay)
         {
             WinDisplay = new();
+            new Thread(WinDisplay.Init).Start();
+
             displays.Add(WinDisplay);
         }
         #endregion
@@ -232,10 +241,13 @@ public class OS
     }
     #endregion
 
+    #region Log
     void Log(string line) => Console.WriteLine(line);
     void LogInit(string line) => Console.WriteLine("[init] Inited " + line);
     void LogInfo(string line) => Console.WriteLine("[info] " + line);
+    #endregion
 
+    #region App
     void Update()
     {
         #region Render Cursor
@@ -285,6 +297,7 @@ public class OS
             CurrentApp = null;
         }
     }
+    #endregion
 
     #region Iterception Events
     bool OnMouseMove(int x, int y)
@@ -310,9 +323,13 @@ public class OS
         return false;
     }
 
+    static Key[] specialKeys = [Key.NumLock, Key.LShift, Key.CapsLock, Key.LControl];
     bool OnKeyDown(Key key, bool repeat)
     {
         if (repeat)
+            return false;
+
+        if (specialKeys.Contains(key))
             return false;
 
         if (IsActiveMouse)
@@ -323,7 +340,7 @@ public class OS
                 {
                     int index = (int)(MouseY / Hotbar.IconSize);
                     Hotbar.Select(index);
-                    return false;
+                    return true;
                 }
             }
 
@@ -341,7 +358,9 @@ public class OS
                 }
 
                 CurrentApp.OnKeyDown(key);
-            }            
+            }
+
+            return true;
         }
         else
         {
@@ -367,6 +386,9 @@ public class OS
 
     bool OnKeyUp(Key key)
     {
+        if (specialKeys.Contains(key))
+            return false;
+
         if (IsActiveMouse)
         {
             if (key != ActiveMouseKey)

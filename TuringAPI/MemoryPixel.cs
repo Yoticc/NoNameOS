@@ -16,6 +16,15 @@ public struct MemoryPixel
 
     public short Value;
 
+    public Color ToGDIColor()
+    {
+        byte r = (byte)(((Value >> 11) & 0x1F) << 3);
+        byte g = (byte)(((Value >> 5) & 0x3F) << 2);
+        byte b = (byte)((Value & 0x1F) << 3);
+
+        return Color.FromArgb(r, g, b);
+    }
+
     public static MemoryPixel FromGDIColor(Color color) => new(color.R, color.G, color.B);
 
     public static MemoryPixel Black = new(0, 0, 0);

@@ -26,7 +26,7 @@ public abstract class App
     public void SetOS(OS os)
     {
         OS = os;
-        Display = os.Display;
+        Display = os.WorkspaceDisplay;
     }
 
     public void SetIcon(MemoryBitmap icon, bool disposeOld = true)

@@ -12,4 +12,7 @@ public class Interop
 
     [DllImport(user)] public static extern
         short GetKeyState(Keys vKey);
+
+    [DllImport(user)] public static extern
+        short GetKeyState(Key vKey);
 }

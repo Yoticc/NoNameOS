@@ -7,13 +7,8 @@ using System.Threading.Tasks;
 using TuringAPI;
 
 namespace NoNameOS.Apps;
-public class InfoApp : App
+public class InfoApp() : App("Info")
 {
-    public InfoApp() : base("Info")
-    {
-        
-    }
-
     public override MemoryBitmap GetIcon()
     {
         using var bitmap = NewGDIBitmapForIcon;

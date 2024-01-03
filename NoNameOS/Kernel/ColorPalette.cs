@@ -8,6 +8,7 @@ using TuringAPI;
 
 public class ColorPalette
 {
+    public readonly Color GDIBackground = Color.FromArgb(42, 42, 42);
     public readonly MemoryPixel Background = MemoryPixel.FromByte(42);
     public readonly MemoryPixel Hotbar = MemoryPixel.FromByte(53);
     public readonly MemoryPixel SelectedCapHotbar = MemoryPixel.FromGDIColor(Color.Magenta);
